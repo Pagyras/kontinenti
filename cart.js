@@ -10,8 +10,8 @@ function displayCartItems() {
 
   const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-  cartItems.forEach((item) => {
-    const { name, price, quantity, image } = item; // Добавляем image
+  cartItems.forEach((item, index) => {
+    const { name, price, quantity, image } = item;
     const itemTotal = price * quantity;
     totalPrice += itemTotal;
 
@@ -19,13 +19,13 @@ function displayCartItems() {
     cartItemElement.classList.add('product-card');
     cartItemElement.setAttribute('data-name', name);
     cartItemElement.innerHTML = `
-        <img src="${image}" alt="${name}"> <!-- Используем URL изображения -->
+        <img src="${image}" alt="${name}">
         <div class="product-details">
             <h3>${name}</h3>
             <div class="quantity-control">
-                <button class="minus-btn">-</button>
+                <button class="minus-btn" data-index="${index}">-</button>
                 <span class="quantity">${quantity}</span>
-                <button class="plus-btn">+</button>
+                <button class="plus-btn" data-index="${index}">+</button>
             </div>
         </div>
     `;
@@ -34,45 +34,21 @@ function displayCartItems() {
 
   totalPriceElement.textContent = Math.floor(totalPrice);
 
-  // Обработчики событий для кнопок "-" и "+"
+  // Обновляем переменные после изменения DOM
   const minusButtons = document.querySelectorAll('#cart-items .minus-btn');
   const plusButtons = document.querySelectorAll('#cart-items .plus-btn');
   const quantities = document.querySelectorAll('#cart-items .quantity');
 
   minusButtons.forEach((button, index) => {
-    button.addEventListener('click', () => {
-      let quantity = parseInt(quantities[index].textContent);
-      if (quantity > 1) {
-        quantity--;
-        quantities[index].textContent = quantity;
-        const item = cartItems[index];
-        item.quantity = quantity;
-        updateCartItem(item.name, quantity);
-        updateTotalPrice();
-        broadcastChannel.postMessage({ action: 'update', item });
-      } else {
-        const item = cartItems[index];
-        removeFromCart(item.name);
-        displayCartItems();
-        broadcastChannel.postMessage({ action: 'remove', item });
-      }
-    });
+    button.removeEventListener('click', handleMinusClick);
+    button.addEventListener('click', handleMinusClick);
   });
 
   plusButtons.forEach((button, index) => {
-    button.addEventListener('click', () => {
-      let quantity = parseInt(quantities[index].textContent);
-      quantity++;
-      quantities[index].textContent = quantity;
-      const item = cartItems[index];
-      item.quantity = quantity;
-      updateCartItem(item.name, quantity);
-      updateTotalPrice();
-      broadcastChannel.postMessage({ action: 'update', item });
-    });
+    button.removeEventListener('click', handlePlusClick);
+    button.addEventListener('click', handlePlusClick);
   });
 
-  // Проверка суммы на кнопке "Итого" и блокировка клика, если сумма равна 0
   if (totalPrice === 0) {
     totalButton.style.pointerEvents = 'none';
     totalButton.style.opacity = '0.5';
@@ -80,6 +56,38 @@ function displayCartItems() {
     totalButton.style.pointerEvents = 'auto';
     totalButton.style.opacity = '1';
   }
+}
+
+// Обработчик для кнопки "-"
+function handleMinusClick(event) {
+  const index = event.target.dataset.index;
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  let quantity = cartItems[index].quantity;
+  
+  if (quantity > 1) {
+    quantity--;
+    cartItems[index].quantity = quantity;
+    updateCartItem(cartItems[index].name, quantity);
+    displayCartItems();
+    broadcastChannel.postMessage({ action: 'update', item: cartItems[index] });
+  } else {
+    const item = cartItems[index];
+    removeFromCart(item.name);
+    displayCartItems();
+    broadcastChannel.postMessage({ action: 'remove', item });
+  }
+}
+
+// Обработчик для кнопки "+"
+function handlePlusClick(event) {
+  const index = event.target.dataset.index;
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  let quantity = cartItems[index].quantity;
+  quantity++;
+  cartItems[index].quantity = quantity;
+  updateCartItem(cartItems[index].name, quantity);
+  displayCartItems();
+  broadcastChannel.postMessage({ action: 'update', item: cartItems[index] });
 }
 
 // Функция для обновления количества товара в корзине
@@ -111,7 +119,6 @@ function updateTotalPrice() {
   });
   totalPriceElement.textContent = totalPrice.toFixed(2);
 
-  // Проверка суммы на кнопке "Итого" и блокировка клика, если сумма равна 0
   if (totalPrice === 0) {
     totalButton.style.pointerEvents = 'none';
     totalButton.style.opacity = '0.5';
@@ -137,7 +144,7 @@ broadcastChannel.addEventListener('message', (event) => {
       displayCartItems();
       break;
     case 'remove':
-      removeFromCart(item.name); // Исправлено
+      removeFromCart(item.name);
       displayCartItems();
       break;
     case 'update':
@@ -151,14 +158,14 @@ broadcastChannel.addEventListener('message', (event) => {
 
 // Функция для добавления товара в корзину
 function addToCart(item) {
-  const { name, price, quantity, image } = item; // Добавляем image
+  const { name, price, quantity, image } = item;
   let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
   const existingItemIndex = cartItems.findIndex(cartItem => cartItem.name === name);
 
   if (existingItemIndex !== -1) {
     cartItems[existingItemIndex].quantity += quantity;
   } else {
-    cartItems.push({ name, price, quantity, image }); // Сохраняем image
+    cartItems.push({ name, price, quantity, image });
   }
 
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -170,10 +177,16 @@ const cartTotalButton = document.getElementById('cart-total');
 // Функция для отправки данных в Telegram-бот
 const sendDataToBot = () => {
   return new Promise((resolve, reject) => {
-    const totalPrice = parseFloat(document.getElementById('total-price').textContent);
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const totalPrice = parseFloat(totalPriceElement.textContent);
     
     const dataToSend = {
-        total: totalPrice
+      items: cartItems.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      total: totalPrice
     };
 
     // Отправляем данные в бот
@@ -188,9 +201,8 @@ const sendDataToBot = () => {
 cartTotalButton.addEventListener('click', () => {
   sendDataToBot()
     .then(() => {
-      // После успешной отправки вызываем функцию для очистки корзины
       clearCart();
-      localStorage.clear(); // Очищаем все данные из localStorage
+      localStorage.clear();
     })
     .catch((error) => {
       console.error('Произошла ошибка при отправке данных в бот:', error);
@@ -200,13 +212,12 @@ cartTotalButton.addEventListener('click', () => {
 // Функция для очистки корзины
 function clearCart() {
   localStorage.removeItem('cartItems');
-  displayCartItems(); // Перерисовываем корзину после очистки
+  displayCartItems();
 }
 
 // Получите элементы корзины
 const addToCartButtons = document.querySelectorAll('.add-to-cart');
 const quantityControls = document.querySelectorAll('.quantity-control');
-const quantities = document.querySelectorAll('.quantity');
 const productCards = document.querySelectorAll('.product-card');
 
 function updateCartStateOnPage() {
@@ -230,45 +241,15 @@ function updateCartStateOnPage() {
 
 addToCartButtons.forEach((button, index) => {
   button.addEventListener('click', (event) => {
-    event.preventDefault(); // Предотвращаем поведение по умолчанию для ссылки
+    event.preventDefault();
     button.style.display = 'none';
     quantityControls[index].style.display = 'flex';
     const name = productCards[index].dataset.name;
     const price = parseFloat(productCards[index].dataset.price);
-    const image = productCards[index].querySelector('img').src; // Получаем URL изображения
+    const image = productCards[index].querySelector('img').src;
     const quantity = parseInt(quantities[index].textContent);
-    addToCart(name, price, quantity, image); // Добавляем товар в корзину с изображением
-    broadcastChannel.postMessage({ action: 'add', item: { name, price, quantity, image } }); // Отправляем сообщение в канал
-  });
-});
-
-const minusButtons = document.querySelectorAll('.minus-btn');
-const plusButtons = document.querySelectorAll('.plus-btn');
-
-minusButtons.forEach((button, index) => {
-  button.addEventListener('click', () => {
-    let quantity = parseInt(quantities[index].textContent);
-    if (quantity > 1) {
-      quantity--;
-      quantities[index].textContent = quantity;
-      const name = productCards[index].dataset.name;
-      updateCartItem(name, quantity); // Используем имя товара для обновления корзины
-    } else {
-      quantityControls[index].style.display = 'none';
-      addToCartButtons[index].style.display = 'block';
-      const name = productCards[index].dataset.name;
-      removeFromCart(name); // Используем имя товара для удаления из корзины
-    }
-  });
-});
-
-plusButtons.forEach((button, index) => {
-  button.addEventListener('click', () => {
-    let quantity = parseInt(quantities[index].textContent);
-    quantity++;
-    quantities[index].textContent = quantity;
-    const name = productCards[index].dataset.name;
-    updateCartItem(name, quantity); // Используем имя товара для обновления корзины
+    addToCart({ name, price, quantity, image });
+    broadcastChannel.postMessage({ action: 'add', item: { name, price, quantity, image } });
   });
 });
 
@@ -279,7 +260,7 @@ function addToCart(name, price, quantity, image) {
   if (existingItemIndex !== -1) {
     cartItems[existingItemIndex].quantity += quantity;
   } else {
-    cartItems.push({ name, price, quantity, image }); // Добавляем изображение
+    cartItems.push({ name, price, quantity, image });
   }
 
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
