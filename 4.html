@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лапша</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="page4">
+  <header>
+    <div class="header-text">Континенты</div>
+    <nav>
+      <ul>
+          <li>
+              <a href="index.html">
+                  <img src="back.png" alt="Назад" style="width: 24px; height: 24px;">
+              </a>
+          </li>
+          <a href="cart.html">
+              <div class="cart-btn">
+                  <img src="cart.png" alt="Корзина">
+              </div>
+          </a>
+      </ul>
+  </nav>
+  </header>
+  <main>
+    <div class="product-grid">
+      <div class="product-card" data-name="Карбонара" data-price="410">
+          <img src="karb.jpg" alt="Карбонара">
+        <div class="product-details">
+          <h3>Карбонара</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">410р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Тяхан с курицей" data-price="250">
+          <img src="sobkyr.jpg" alt="Тяхан с курицей">
+        <div class="product-details">
+          <h3>Тяхан c курицей</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">250р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Удон с курицей" data-price="250">
+        <img src="udsobkyr.jpg" alt="Удон с курицей">
+      <div class="product-details">
+        <h3>Удон с курицей</h3>
+        <div class="quantity-control" style="display: none;">
+          <button class="minus-btn">-</button>
+          <span class="quantity">1</span>
+          <button class="plus-btn">+</button>
+        </div>
+        <button class="add-to-cart">250р</button>
+      </div>
+    </div>
+    <div class="product-card" data-name="Соба с курицей" data-price="250">
+      <img src="udsobkyr.jpg" alt="Соба с курицей">
+    <div class="product-details">
+      <h3>Соба с курицей</h3>
+      <div class="quantity-control" style="display: none;">
+        <button class="minus-btn">-</button>
+        <span class="quantity">1</span>
+        <button class="plus-btn">+</button>
+      </div>
+      <button class="add-to-cart">250р</button>
+    </div>
+  </div>
+      <div class="product-card" data-name="Тяхан с креветками" data-price="350">
+          <img src="sobkrev.jpg" alt="Тяхан с креветками">
+        <div class="product-details">
+          <h3>Тяхан с креветками</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">350р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Соба с креветками" data-price="350">
+        <img src="udsobk.jpg" alt="Соба с креветками">
+      <div class="product-details">
+        <h3>Соба с креветками</h3>
+        <div class="quantity-control" style="display: none;">
+          <button class="minus-btn">-</button>
+          <span class="quantity">1</span>
+          <button class="plus-btn">+</button>
+        </div>
+        <button class="add-to-cart">350р</button>
+      </div>
+    </div>
+    <div class="product-card" data-name="Удон с креветками" data-price="350">
+      <img src="udsobk.jpg" alt="Удон с креветками">
+    <div class="product-details">
+      <h3>Удон с креветками</h3>
+      <div class="quantity-control" style="display: none;">
+        <button class="minus-btn">-</button>
+        <span class="quantity">1</span>
+        <button class="plus-btn">+</button>
+      </div>
+      <button class="add-to-cart">350р</button>
+    </div>
+  </div>
+    </div>
+  </main>
+
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+    </div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

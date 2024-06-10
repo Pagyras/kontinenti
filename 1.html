@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Закуски</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="page1">
+    <header>
+      <div class="header-text">Континенты</div>
+      <nav>
+        <ul>
+            <li>
+                <a href="index.html">
+                    <img src="back.png" alt="Назад" style="width: 24px; height: 24px;">
+                </a>
+            </li>
+            <a href="cart.html">
+                <div class="cart-btn">
+                    <img src="cart.png" alt="Корзина">
+                </div>
+            </a>
+        </ul>
+    </nav>
+    </header>
+    <main>
+        <div class="product-grid">
+          <div class="product-card" data-name="Наггетсы" data-price="180">
+                <img src="trip.jpg" alt="Наггетсы">
+                <div class="product-details">
+                    <h3>Наггетсы</h3>
+                    <div class="quantity-control" style="display: none;">
+                        <button class="minus-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="plus-btn">+</button>
+                    </div>
+                    <a href="#" class="add-to-cart">
+                        <span>180р</span>
+                    </a>
+                </div>
+            </div>
+            <div class="product-card" data-name="Картофель фри" data-price="120">
+                <img src="fri.jpg" alt="Картофель фри">
+                <div class="product-details">
+                    <h3>Картофель фри</h3>
+                    <div class="quantity-control" style="display: none;">
+                        <button class="minus-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="plus-btn">+</button>
+                    </div>
+                    <a href="#" class="add-to-cart">
+                        <span>120р</span>
+                    </a>
+                </div>
+            </div>
+            <div class="product-card" data-name="Картофельные дольки" data-price="120">
+                <img src="der.jpg" alt="Картофельные дольки">
+                <div class="product-details">
+                    <h3>Картофельные дольки</h3>
+                    <div class="quantity-control" style="display: none;">
+                        <button class="minus-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="plus-btn">+</button>
+                    </div>
+                    <a href="#" class="add-to-cart">
+                        <span>120р</span>
+                    </a>
+                </div>
+            </div>
+            <div class="product-card" data-name="Креветки в темпуре с васаби" data-price="250">
+                <img src="krev.jpg" alt="Креветки в темпуре с васаби">
+                <div class="product-details">
+                    <h3>Креветки в темпуре с васаби</h3>
+                    <div class="quantity-control" style="display: none;">
+                        <button class="minus-btn">-</button>
+                        <span class="quantity">1</span>
+                        <button class="plus-btn">+</button>
+                    </div>
+                    <a href="#" class="add-to-cart">
+                        <span>250р</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

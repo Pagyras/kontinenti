@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Пицца</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body id="page5">
+  <header>
+    <div class="header-text">Континенты</div>
+    <nav>
+      <ul>
+          <li>
+              <a href="index.html">
+                  <img src="back.png" alt="Назад" style="width: 24px; height: 24px;">
+              </a>
+          </li>
+          <a href="cart.html">
+              <div class="cart-btn">
+                  <img src="cart.png" alt="Корзина">
+              </div>
+          </a>
+      </ul>
+  </nav>
+  </header>
+  <main>
+    <div class="product-grid">
+      <div class="product-card" data-name="4 сыра" data-price="570">
+          <img src="4s.jpg" alt="4 сыра">
+        <div class="product-details">
+          <h3>4 сыра</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">570р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Пепперони" data-price="490">
+          <img src="pep.jpg" alt="Пепперони">
+        <div class="product-details">
+          <h3>Пепперони</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">490р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Ветчина/грибы" data-price="530">
+          <img src="gribb.jpg" alt="Ветчина/грибы">
+        <div class="product-details">
+          <h3>Ветчина/грибы</h3>
+          <div class="quantity-control" style="display: none;">
+            <button class="minus-btn">-</button>
+            <span class="quantity">1</span>
+            <button class="plus-btn">+</button>
+          </div>
+          <button class="add-to-cart">530р</button>
+        </div>
+      </div>
+      <div class="product-card" data-name="Маргарита" data-price="430">
+        <img src="marg.jpg" alt="Маргарита">
+      <div class="product-details">
+        <h3>Маргарита</h3>
+        <div class="quantity-control" style="display: none;">
+          <button class="minus-btn">-</button>
+          <span class="quantity">1</span>
+          <button class="plus-btn">+</button>
+        </div>
+        <button class="add-to-cart">430р</button>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+    </div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
